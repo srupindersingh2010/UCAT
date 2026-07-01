@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aman's UCAT 2026 — 11-Week Plan</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #21253a;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --muted: #7b8099;
+    --accent: #4f7cff;
+    --accent-glow: rgba(79,124,255,0.18);
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.1);
+    --amber: #f59e0b;
+    --amber-bg: rgba(245,158,11,0.1);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.1);
+    --purple: #a78bfa;
+    --purple-bg: rgba(167,139,250,0.1);
+    --teal: #2dd4bf;
+    --teal-bg: rgba(45,212,191,0.1);
+    --radius: 10px;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --mono: 'Cascadia Code', 'Fira Code', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; min-height: 100vh; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(15,17,23,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; gap: 2rem; height: 56px; }
+  .nav-brand { font-weight: 700; font-size: 15px; color: var(--accent); letter-spacing: -0.3px; white-space: nowrap; }
+  .nav-brand span { color: var(--text); font-weight: 400; }
+  .nav-links { display: flex; gap: 0; flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-link { font-size: 13px; color: var(--muted); padding: 0 14px; height: 56px; display: flex; align-items: center; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; text-decoration: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-score { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .score-pill { background: var(--accent-glow); border: 1px solid var(--accent); color: var(--accent); font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+
+  /* HERO */
+  .hero { padding: 3rem 1.5rem 2rem; max-width: 960px; margin: 0 auto; }
+  .hero-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  .hero-title { font-size: clamp(28px, 5vw, 44px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; }
+  .hero-title .highlight { color: var(--accent); }
+  .hero-sub { font-size: 15px; color: var(--muted); max-width: 560px; margin-bottom: 2rem; }
+  .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 2rem; }
+  @media(max-width:600px) { .hero-stats { grid-template-columns: repeat(2,1fr); } }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+  .stat-val { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -1px; }
+  .stat-val.green { color: var(--green); }
+  .stat-val.amber { color: var(--amber); }
+  .stat-val.accent { color: var(--accent); }
+  .stat-val.purple { color: var(--purple); }
+  .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* PROGRESS BAR */
+  .progress-section { max-width: 960px; margin: 0 auto 1rem; padding: 0 1.5rem; }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
+  .progress-bar { background: var(--surface); border-radius: 4px; height: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--purple)); border-radius: 4px; transition: width 0.5s ease; }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 960px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* WEEK CARDS */
+  .week-grid { display: flex; flex-direction: column; gap: 8px; }
+  .week-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .week-card.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-glow); }
+  .week-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .week-header:hover { background: rgba(255,255,255,0.03); }
+  .week-num { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .week-info { flex: 1; }
+  .week-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .week-dates { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .week-meta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .week-progress { font-size: 11px; color: var(--muted); }
+  .week-chevron { color: var(--muted); font-size: 14px; transition: transform 0.2s; }
+  .week-body { display: none; border-top: 1px solid var(--border); }
+  .week-body.open { display: block; }
+
+  /* DAY ROWS */
+  .day-list { padding: 0; }
+  .day-row { display: grid; grid-template-columns: 90px 120px 1fr auto; gap: 12px; align-items: start; padding: 12px 18px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  .day-row:last-child { border-bottom: none; }
+  .day-row:hover { background: rgba(255,255,255,0.02); }
+  .day-row.done { opacity: 0.55; }
+  .day-row.done .day-task { text-decoration: line-through; color: var(--muted); }
+  @media(max-width:650px) { .day-row { grid-template-columns: 1fr auto; } .day-date,.day-tag { display: none; } }
+  .day-date { font-size: 12px; font-weight: 500; color: var(--muted); padding-top: 1px; white-space: nowrap; }
+  .day-tag { display: inline-flex; align-items: center; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.04em; white-space: nowrap; height: fit-content; }
+  .tag-vr  { background: rgba(79,124,255,0.15); color: #7aa2ff; border: 1px solid rgba(79,124,255,0.3); }
+  .tag-dm  { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+  .tag-qr  { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+  .tag-sjt { background: rgba(167,139,250,0.12); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.25); }
+  .tag-mock { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+  .tag-rest { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+  .tag-setup { background: rgba(45,212,191,0.12); color: var(--teal); border: 1px solid rgba(45,212,191,0.25); }
+  .day-task { font-size: 13px; color: var(--text); line-height: 1.5; padding-top: 1px; }
+  .day-check { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--border2); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; margin-top: 1px; }
+  .day-check:hover { border-color: var(--accent); background: var(--accent-glow); }
+  .day-check.checked { background: var(--green); border-color: var(--green); }
+  .day-check.checked::after { content: '✓'; color: #000; font-size: 13px; font-weight: 700; }
+
+  /* ALERTS */
+  .week-alert { margin: 0 18px 14px; padding: 10px 14px; border-radius: 8px; font-size: 12px; line-height: 1.6; border-left: 3px solid; }
+  .alert-info  { background: rgba(79,124,255,0.08); border-color: var(--accent); color: #a5b4fc; }
+  .alert-warn  { background: rgba(245,158,11,0.08); border-color: var(--amber); color: #fcd34d; }
+  .alert-success { background: rgba(34,197,94,0.08); border-color: var(--green); color: #86efac; }
+  .alert-danger { background: rgba(239,68,68,0.08); border-color: var(--red); color: #fca5a5; }
+
+  /* SECTION GUIDE */
+  .sg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:600px) { .sg-grid { grid-template-columns: 1fr; } }
+  .sg-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+  .sg-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .sg-meta { font-size: 11px; color: var(--muted); margin-bottom: 10px; font-family: var(--mono); }
+  .sg-tip { font-size: 13px; color: var(--muted); line-height: 1.65; }
+  .sg-aman { margin-top: 12px; padding: 8px 12px; border-radius: 6px; font-size: 12px; line-height: 1.5; font-style: italic; }
+
+  /* RESOURCES */
+  .res-list { display: flex; flex-direction: column; gap: 8px; }
+  .res-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; display: flex; gap: 14px; align-items: flex-start; }
+  .res-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.05em; }
+  .badge-free { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .badge-paid { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .res-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .res-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .res-url { font-size: 11px; color: var(--accent); margin-top: 4px; font-family: var(--mono); }
+
+  /* ALERTS TAB */
+  .alerts-list { display: flex; flex-direction: column; gap: 10px; }
+  .al-card { border-radius: var(--radius); padding: 16px 18px; border-left: 4px solid; }
+  .al-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .al-card p { font-size: 13px; line-height: 1.6; }
+
+  /* MOTIVATION */
+  .mot-list { display: flex; flex-direction: column; gap: 12px; }
+  .mot-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; border-left: 4px solid var(--accent); }
+  .mot-card h4 { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
+  .mot-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .target-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 1.5rem; }
+  .tg-card { border-radius: var(--radius); padding: 1.25rem; text-align: center; border: 1px solid; }
+  .tg-num { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .tg-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* SECTION HEADINGS */
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; }
+
+  /* SCORE TRACKER */
+  .tracker-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 1.5rem; }
+  @media(max-width:600px) { .tracker-grid { grid-template-columns: repeat(3,1fr); } }
+  .tracker-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; text-align: center; }
+  .tracker-mock { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .tracker-score { font-size: 18px; font-weight: 700; color: var(--text); font-family: var(--mono); }
+  .tracker-score.empty { color: var(--border2); }
+  .tracker-input { background: transparent; border: none; border-bottom: 1px solid var(--border2); color: var(--text); font-size: 16px; font-weight: 700; font-family: var(--mono); width: 70px; text-align: center; outline: none; padding: 2px 0; }
+  .tracker-input::placeholder { color: var(--border2); font-size: 13px; }
+  .tracker-input:focus { border-bottom-color: var(--accent); }
+
+  /* COUNTDOWN */
+  .countdown-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .cd-item { text-align: center; }
+  .cd-num { font-size: 28px; font-weight: 800; color: var(--accent); font-family: var(--mono); letter-spacing: -1px; }
+  .cd-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .cd-divider { font-size: 24px; color: var(--border2); font-weight: 300; }
+
+  /* GITHUB README note */
+  .github-banner { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 18px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+  .github-icon { font-size: 18px; }
+
+  /* CURRENT WEEK BADGE */
+  .current-badge { font-size: 10px; font-weight: 700; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 20px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Aman <span>UCAT 2026</span></div>
+  <div class="nav-links">
+    <a class="nav-link active" onclick="showPanel('schedule',this)">Schedule</a>
+    <a class="nav-link" onclick="showPanel('sections',this)">Sections</a>
+    <a class="nav-link" onclick="showPanel('resources',this)">Resources</a>
+    <a class="nav-link" onclick="showPanel('tracker',this)">Score Tracker</a>
+    <a class="nav-link" onclick="showPanel('alerts',this)">Rules</a>
+    <a class="nav-link" onclick="showPanel('motivation',this)">Motivation</a>
+  </div>
+  <div class="nav-score">
+    <span>Target</span>
+    <span class="score-pill">1900+</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">11-Week Intensive Preparation Plan</div>
+  <h1 class="hero-title">Aman's Road to<br><span class="highlight">UCAT 2026</span></h1>
+  <p class="hero-sub">Every day planned. Every task auditable. Every session logged. 3 July → 16 September 2026.</p>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-val accent">75</div><div class="stat-lbl">Days of preparation</div></div>
+    <div class="stat-card"><div class="stat-val green">5</div><div class="stat-lbl">Full mock exams</div></div>
+    <div class="stat-card"><div class="stat-val amber">4</div><div class="stat-lbl">UCAT sections</div></div>
+    <div class="stat-card"><div class="stat-val purple">2700</div><div class="stat-lbl">Maximum score</div></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-section">
+  <div class="progress-header">
+    <span id="progress-label">Overall plan completion</span>
+    <span id="progress-pct">0%</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<div class="main">
+
+<!-- ===================== SCHEDULE ===================== -->
+<div class="panel active" id="panel-schedule">
+
+  <div class="countdown-bar" id="countdown-bar">
+    <div class="cd-item"><div class="cd-num" id="cd-days">—</div><div class="cd-lbl">Days</div></div>
+    <div class="cd-divider">:</div>
+    <div class="cd-item"><div class="cd-num" id="cd-hours">—</div><div class="cd-lbl">Hours</div></div>
+    <div class="cd-divider">:</div>
+    <div class="cd-item"><div class="cd-num" id="cd-mins">—</div><div class="cd-lbl">Minutes</div></div>
+    <div style="margin-left:auto;font-size:13px;color:var(--muted)">until test deadline<br><strong style="color:var(--text)">16 Sept 2026</strong></div>
+  </div>
+
+  <div class="github-banner">
+    <span class="github-icon">⌗</span>
+    <span>Checkboxes are saved automatically in your browser. To share progress, host this file on GitHub Pages — all tasks persist locally per device.</span>
+  </div>
+
+  <div class="week-grid" id="week-grid"></div>
+</div>
+
+<!-- ===================== SECTIONS ===================== -->
+<div class="panel" id="panel-sections">
+  <div class="section-heading">Section Strategies</div>
+  <div class="section-sub">Tailored to Aman's profile — gaming brain, physics strength, ward experience</div>
+  <div class="sg-grid">
+    <div class="sg-card">
+      <div class="sg-title">Verbal Reasoning</div>
+      <div class="sg-meta">44 questions · 21 mins · 28s per question</div>
+      <div class="sg-tip">Answer <em>only</em> from the text — never use outside knowledge. Read the question before the passage. Max 2 minutes per passage then move on regardless. Master the Can't Tell option — this is where most marks are lost.</div>
+      <div class="sg-aman" style="background:var(--amber-bg);color:#fcd34d">⚠ Needs most work — start earliest and read NHS/science news daily to build speed naturally.</div>
+    </div>
+    <div class="sg-card">
+      <div class="sg-title">Decision Making</div>
+      <div class="sg-meta">29 questions · 31 mins · 64s per question</div>
+      <div class="sg-tip">Learn all 6 question types separately: syllogisms, Venn diagrams, probability, logical puzzles, assumptions, interpreting information. Always draw diagrams on paper — never do it mentally. Most time per question of any section.</div>
+      <div class="sg-aman" style="background:var(--green-bg);color:#86efac">✓ Gaming brain = natural logical instinct. Should be Aman's highest scoring section.</div>
+    </div>
+    <div class="sg-card">
+      <div class="sg-title">Quantitative Reasoning</div>
+      <div class="sg-meta">36 questions · 26 mins · 43s per question</div>
+      <div class="sg-tip">Physics and Chemistry maths is the core. Percentages, ratios, speed/distance/time, area/volume, compound interest. Practise using the onscreen calculator efficiently. Mental arithmetic for simple steps saves critical seconds.</div>
+      <div class="sg-aman" style="background:var(--green-bg);color:#86efac">✓ Strong natural advantage. Focus on speed — accuracy will come quickly with the science background.</div>
+    </div>
+    <div class="sg-card">
+      <div class="sg-title">Situational Judgement</div>
+      <div class="sg-meta">69 questions · 26 mins · 22s per question</div>
+      <div class="sg-tip">Read GMC Good Medical Practice. Priority order always: patient safety → honesty → escalation → teamwork. Partial marks for near-correct answers. Must hit Band 1 or 2 — many schools auto-reject Band 4. No negative marking, always answer.</div>
+      <div class="sg-aman" style="background:var(--accent-glow);color:#a5b4fc">★ Ward volunteering is a massive edge. Aman has lived these scenarios. Reflect on real ward moments before each SJT session.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== RESOURCES ===================== -->
+<div class="panel" id="panel-resources">
+  <div class="section-heading">Preparation Resources</div>
+  <div class="section-sub">Start with all free resources. Only invest in paid tools after Week 4 if needed.</div>
+  <div class="res-list">
+    <div class="res-card"><span class="res-badge badge-free">FREE</span><div><div class="res-name">UCAT Official Practice Tests</div><div class="res-desc">Made by the test creators. Most important resource of all. Do these multiple times throughout the 11 weeks.</div><div class="res-url">ucat.ac.uk/prepare</div></div></div>
+    <div class="res-card"><span class="res-badge badge-free">FREE</span><div><div class="res-name">Medibuddy Adaptive Question Bank</div><div class="res-desc">AI-powered — tells Aman exactly which question types to focus on based on his performance. Use daily.</div><div class="res-url">medistudents.com</div></div></div>
+    <div class="res-card"><span class="res-badge badge-free">FREE</span><div><div class="res-name">6med YouTube Channel</div><div class="res-desc">Full section strategy videos, completely free. Watch each section tutorial in Week 1 before any questions.</div><div class="res-url">youtube.com/@6med</div></div></div>
+    <div class="res-card"><span class="res-badge badge-free">FREE</span><div><div class="res-name">MedicMind YouTube</div><div class="res-desc">Section walkthroughs and SJT explainers. Particularly good for understanding NHS values in plain language.</div><div class="res-url">youtube.com/@MedicMind</div></div></div>
+    <div class="res-card"><span class="res-badge badge-free">FREE</span><div><div class="res-name">The Medic Portal — Free Questions</div><div class="res-desc">Free practice questions for all 4 sections. Good for variety after the official UCAT practice tests.</div><div class="res-url">themedicportal.com</div></div></div>
+    <div class="res-card"><span class="res-badge badge-free">FREE</span><div><div class="res-name">GMC Good Medical Practice</div><div class="res-desc">Essential SJT reading. Short document. Read once in Week 1 and once again the night before the test.</div><div class="res-url">gmc-uk.org/good-medical-practice</div></div></div>
+    <div class="res-card"><span class="res-badge badge-paid">PAID</span><div><div class="res-name">Medify — approx £79 for 3 months</div><div class="res-desc">Best paid platform. 6 full mocks and thousands of adaptive questions. Consider from Week 5 if budget allows.</div><div class="res-url">medify.co</div></div></div>
+    <div class="res-card"><span class="res-badge badge-paid">PAID</span><div><div class="res-name">6med Ultimate Package</div><div class="res-desc">Live teaching, full mocks, personal statement help. Premium and comprehensive. Good if budget allows.</div><div class="res-url">6med.co.uk</div></div></div>
+  </div>
+</div>
+
+<!-- ===================== TRACKER ===================== -->
+<div class="panel" id="panel-tracker">
+  <div class="section-heading">Score Tracker</div>
+  <div class="section-sub">Log every mock score here. Watch the trend. Upward is everything.</div>
+  <div class="tracker-grid">
+    <div class="tracker-card"><div class="tracker-mock">Baseline</div><input class="tracker-input" id="score-0" type="number" placeholder="—" onchange="saveScore(0,this.value)" min="900" max="2700"></div>
+    <div class="tracker-card"><div class="tracker-mock">Mock 1 — Wk 4</div><input class="tracker-input" id="score-1" type="number" placeholder="—" onchange="saveScore(1,this.value)" min="900" max="2700"></div>
+    <div class="tracker-card"><div class="tracker-mock">Mock 2 — Wk 6</div><input class="tracker-input" id="score-2" type="number" placeholder="—" onchange="saveScore(2,this.value)" min="900" max="2700"></div>
+    <div class="tracker-card"><div class="tracker-mock">Mock 3 — Wk 8</div><input class="tracker-input" id="score-3" type="number" placeholder="—" onchange="saveScore(3,this.value)" min="900" max="2700"></div>
+    <div class="tracker-card"><div class="tracker-mock">Mock 4 — Wk 9</div><input class="tracker-input" id="score-4" type="number" placeholder="—" onchange="saveScore(4,this.value)" min="900" max="2700"></div>
+    <div class="tracker-card"><div class="tracker-mock">Mock 5 — Wk 10</div><input class="tracker-input" id="score-5" type="number" placeholder="—" onchange="saveScore(5,this.value)" min="900" max="2700"></div>
+  </div>
+  <canvas id="score-chart" height="220" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:block;"></canvas>
+  <div style="margin-top:1.5rem">
+    <div class="section-heading" style="font-size:15px;margin-bottom:10px">Target benchmarks</div>
+    <div class="target-grid">
+      <div class="tg-card" style="border-color:rgba(34,197,94,0.3);background:var(--green-bg)"><div class="tg-num" style="color:var(--green)">1700</div><div class="tg-lbl">Keele A104 minimum — the floor, not the goal</div></div>
+      <div class="tg-card" style="border-color:rgba(245,158,11,0.3);background:var(--amber-bg)"><div class="tg-num" style="color:var(--amber)">1900</div><div class="tg-lbl">Aman's realistic 11-week target</div></div>
+      <div class="tg-card" style="border-color:rgba(79,124,255,0.3);background:var(--accent-glow)"><div class="tg-num" style="color:var(--accent)">2000+</div><div class="tg-lbl">Stretch goal — opens every door</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ALERTS ===================== -->
+<div class="panel" id="panel-alerts">
+  <div class="section-heading">Critical Rules</div>
+  <div class="section-sub">Break none of these.</div>
+  <div class="alerts-list">
+    <div class="al-card" style="background:var(--red-bg);border-color:var(--red)"><h4 style="color:var(--red)">Never skip a mock review</h4><p style="color:#fca5a5">Doing mocks without reviewing wrong answers is the single biggest mistake UCAT candidates make. The review session is where the actual learning happens. Always spend at least 1 hour reviewing every mock immediately after.</p></div>
+    <div class="al-card" style="background:var(--red-bg);border-color:var(--red)"><h4 style="color:var(--red)">Never leave a blank answer</h4><p style="color:#fca5a5">There is NO negative marking in the UCAT. Always answer every single question. Flag and return if time allows but never, ever leave a blank. Every unanswered question is a free mark given away.</p></div>
+    <div class="al-card" style="background:var(--amber-bg);border-color:var(--amber)"><h4 style="color:var(--amber)">No new techniques in the final 2 weeks</h4><p style="color:#fcd34d">New strategies in Weeks 10 and 11 cause confusion, not improvement. Only use techniques that are already automatic and familiar. Trust what has been built over the previous 9 weeks.</p></div>
+    <div class="al-card" style="background:var(--amber-bg);border-color:var(--amber)"><h4 style="color:var(--amber)">Ignore Abstract Reasoning resources</h4><p style="color:#fcd34d">Abstract Reasoning was removed from the UCAT in 2025. Any book, app, or website still listing it as a section is out of date. Time spent on it is completely wasted.</p></div>
+    <div class="al-card" style="background:var(--accent-glow);border-color:var(--accent)"><h4 style="color:var(--accent)">Book test slot in Week 1</h4><p style="color:#a5b4fc">Booking opens 23 June 2026. Aim for 10–12 September. Coventry and Birmingham Pearson VUE centres fill weeks in advance. Book immediately when booking opens — do not delay.</p></div>
+    <div class="al-card" style="background:var(--accent-glow);border-color:var(--accent)"><h4 style="color:var(--accent)">Apply for the UCAT bursary</h4><p style="color:#a5b4fc">The bursary covers the £70 test fee for eligible students. Check eligibility at ucat.ac.uk and apply before booking. Coventry school background may qualify.</p></div>
+    <div class="al-card" style="background:var(--green-bg);border-color:var(--green)"><h4 style="color:var(--green)">Rest is preparation</h4><p style="color:#86efac">Gym and martial arts sessions are not wasted UCAT time. Physical activity measurably improves cognitive performance. Keep training throughout all 11 weeks. Rest days are scheduled deliberately.</p></div>
+    <div class="al-card" style="background:var(--green-bg);border-color:var(--green)"><h4 style="color:var(--green)">Keep a score tracker every week</h4><p style="color:#86efac">Log every mock score in the Score Tracker tab. Seeing an upward trend week on week is one of the most powerful motivators available. Aman knows what levelling up feels like.</p></div>
+  </div>
+</div>
+
+<!-- ===================== MOTIVATION ===================== -->
+<div class="panel" id="panel-motivation">
+  <div class="section-heading">For Aman — When It Gets Hard</div>
+  <div class="section-sub">Read this on the bad days. Not the good ones.</div>
+  <div class="mot-list">
+    <div class="mot-card"><h4>When a mock score disappoints</h4><p>Every wrong answer in practice is a point saved on test day. In martial arts you don't quit because a sparring session went badly — you find out what needs work and come back sharper. The UCAT is exactly the same. A bad mock is not a bad sign. It is information.</p></div>
+    <div class="mot-card"><h4>When time pressure feels impossible</h4><p>Aman has built Lego at speed. He makes decisions in complex games under pressure. His brain is already wired for fast pattern recognition and rapid spatial thinking. The UCAT is a new game — and every game has strategies that can be learned. He has been learning those strategies for weeks.</p></div>
+    <div class="mot-card"><h4>When motivation drops mid-prep</h4><p>Picture a patient on that ward. Someone who was frightened, lonely, and needed someone to bring them food and stop to have a conversation. That is who Aman will one day treat, diagnose, and help to recover. The UCAT is 11 weeks. Medicine is a lifetime. The patients need him to get through this.</p></div>
+    <div class="mot-card"><h4>What Aman already is</h4><p>He is 17 years old. He volunteers in an NHS ward with real patients. He is earning DofE Gold — one of the most demanding youth awards in existence. He trains in martial arts. He goes to the gym. He is disciplined, compassionate, and resilient. He is already more prepared for medicine than most applicants twice his age.</p></div>
+    <div class="mot-card"><h4>On the morning of test day</h4><p>Everything that was built over 11 weeks is inside Aman's brain on that morning. The techniques are trained. The strategies are automatic. The scenarios feel familiar because he has lived them in that ward. Eat a proper breakfast. Leave 45 minutes early. Arrive calm. The test is two hours. He is ready.</p></div>
+  </div>
+  <div class="target-grid" style="margin-top:1.5rem">
+    <div class="tg-card" style="border-color:rgba(34,197,94,0.3);background:var(--green-bg)"><div class="tg-num" style="color:var(--green)">1700</div><div class="tg-lbl">Keele A104 opens. The floor.</div></div>
+    <div class="tg-card" style="border-color:rgba(245,158,11,0.3);background:var(--amber-bg)"><div class="tg-num" style="color:var(--amber)">1900</div><div class="tg-lbl">Many doors open. The goal.</div></div>
+    <div class="tg-card" style="border-color:rgba(79,124,255,0.3);background:var(--accent-glow)"><div class="tg-num" style="color:var(--accent)">2000+</div><div class="tg-lbl">Every door opens. The stretch.</div></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const WEEKS = [
+  { id:'wk1', num:'Week 1', title:'Baseline — know yourself', dates:'3–9 Jul', color:'#4f7cff', colorBg:'rgba(79,124,255,0.12)',
+    days:[
+      {date:'Thu 3 Jul', tag:'setup', label:'Setup', task:'Create UCAT account at ucat.ac.uk. Read all 4 section guides on the official site. Apply for the bursary if eligible — it covers the £70 test fee.'},
+      {date:'Fri 4 Jul', tag:'mock', label:'Baseline', task:'Sit the official UCAT diagnostic test with NO preparation first. This raw score is your true starting point and tells you exactly where to focus.'},
+      {date:'Sat 5 Jul', tag:'vr', label:'VR', task:'Review diagnostic results section by section. Watch the 6med free Verbal Reasoning intro video on YouTube. Note your weakest section clearly.'},
+      {date:'Sun 6 Jul', tag:'dm', label:'DM', task:'Watch Decision Making tutorial on 6med or MedicMind YouTube. Do 20 untimed DM questions — focus on understanding every question type, not speed yet.'},
+      {date:'Mon 7 Jul', tag:'qr', label:'QR', task:'Watch QR tutorial video. Do 20 untimed QR questions. Mental arithmetic drills: percentages, ratios, areas, volumes. 15 mins of maths warm-up.'},
+      {date:'Tue 8 Jul', tag:'sjt', label:'SJT', task:'Read GMC Good Medical Practice (free online, short document). Do 20 SJT practice questions. Reflect on real situations from your ward volunteering.'},
+      {date:'Wed 9 Jul', tag:'vr', label:'VR', task:'Do 30 Verbal Reasoning True/False/Can\'t Tell questions untimed. Practise answering only from the text — never use your own outside knowledge.'},
+    ],
+    alert:{type:'info', text:'Book your test slot this week. Aim for 10–12 September. Coventry and Birmingham Pearson VUE centres fill weeks in advance. Booking opens 23 June 2026.'}
+  },
+  { id:'wk2', num:'Week 2', title:'Learn every question type', dates:'10–16 Jul', color:'#22c55e', colorBg:'rgba(34,197,94,0.1)',
+    days:[
+      {date:'Thu 10 Jul', tag:'vr', label:'VR', task:'40 VR questions with a 28-second limit per question. Write down specifically why every wrong answer was wrong — look for patterns.'},
+      {date:'Fri 11 Jul', tag:'dm', label:'DM', task:'Syllogisms and Venn diagram questions only. 20 DM questions. Draw every diagram on paper — do not try to do it in your head.'},
+      {date:'Sat 12 Jul', tag:'qr', label:'QR', task:'15-minute speed maths drill, then 30 timed QR questions. Practise the onscreen calculator workflow — find the keys quickly without looking.'},
+      {date:'Sun 13 Jul', tag:'sjt', label:'SJT', task:'20 SJT scenarios timed. For every wrong answer — ask yourself: what would the ward nurses or doctors actually do in this situation?'},
+      {date:'Mon 14 Jul', tag:'vr', label:'VR', task:'Full timed VR section — 21 minutes, 44 questions. Review all errors immediately after finishing. Write down every mistake type.'},
+      {date:'Tue 15 Jul', tag:'dm', label:'DM', task:'Probability and logical puzzle questions — 25 DM questions timed. Draw solution diagrams for every question even if you know the answer.'},
+      {date:'Wed 16 Jul', tag:'rest', label:'Review', task:'Review all wrong answers from the whole week. Find the pattern — which type of question is catching you out most? Plan Week 3 around that.'},
+    ]
+  },
+  { id:'wk3', num:'Week 3', title:'Build speed and stamina', dates:'17–23 Jul', color:'#f59e0b', colorBg:'rgba(245,158,11,0.1)',
+    days:[
+      {date:'Thu 17 Jul', tag:'vr', label:'VR', task:'Full timed VR section. Aim to finish with 2 minutes spare. Move on after exactly 2 minutes per passage regardless — no exceptions.'},
+      {date:'Fri 18 Jul', tag:'dm', label:'DM', task:'Full timed DM section — 31 minutes, 29 questions. Lean into gaming instinct — fast logical deduction is your natural strength here.'},
+      {date:'Sat 19 Jul', tag:'mock', label:'Mini mock', task:'VR then QR back to back with 1 minute break only. Practise mental stamina — the real test has no breaks between sections.'},
+      {date:'Sun 20 Jul', tag:'sjt', label:'SJT', task:'Full timed SJT — 26 minutes, 69 questions. Re-read your NHS values notes this morning before starting. Aim for Band 1 thinking.'},
+      {date:'Mon 21 Jul', tag:'qr', label:'QR', task:'Charts and graphs questions — data interpretation, percentage change, unit conversion. 36 questions timed. Use calculator only where needed.'},
+      {date:'Tue 22 Jul', tag:'vr', label:'VR', task:'Read one NHS news article and one medical ethics topic. Then 30 VR questions — the reading habit builds speed over time.'},
+      {date:'Wed 23 Jul', tag:'rest', label:'Review', task:'Full week error log. Update score tracker. Which section needs most focus in Week 4? Plan accordingly.'},
+    ],
+    alert:{type:'warn', text:'If VR is still your slowest section — start reading BBC Science or NHS news for 15 minutes every morning from now. It builds reading speed naturally over time.'}
+  },
+  { id:'wk4', num:'Week 4', title:'First full mock exam', dates:'24–30 Jul', color:'#a78bfa', colorBg:'rgba(167,139,250,0.1)',
+    days:[
+      {date:'Thu 24 Jul', tag:'dm', label:'DM', task:'Advanced DM — argument analysis and interpreting information. 25 timed questions. Review every wrong answer with written explanation.'},
+      {date:'Fri 25 Jul', tag:'vr', label:'VR', task:'Full timed VR section. Goal: all 44 answered, no blanks. Flag and guess if time is short — never leave a question empty.'},
+      {date:'Sat 26 Jul', tag:'mock', label:'MOCK 1', task:'Full mock exam — all 4 sections, 2 hours straight. Phone off, quiet room, timer running, treat it exactly like test day. Log every section score.'},
+      {date:'Sun 27 Jul', tag:'rest', label:'Review', task:'2-hour deep mock review — section by section, question by question. Log the score in the tracker. Celebrate progress, plan what to fix.'},
+      {date:'Mon 28 Jul', tag:'sjt', label:'SJT', task:'Focus on SJT weak areas from Mock 1. Re-read GMC guidance. 30 targeted SJT questions on the types you got wrong.'},
+      {date:'Tue 29 Jul', tag:'qr', label:'QR', task:'Speed challenge — 36 QR questions in 20 minutes (stricter than the real test). Identify which question types slow you down most.'},
+      {date:'Wed 30 Jul', tag:'vr', label:'VR + DM', task:'Mixed VR and DM practice. 45 minutes. Focus only on the question types that appeared in Mock 1 errors.'},
+    ],
+    alert:{type:'success', text:'Mock 1 score is data, not judgement. Even 1600 tells you exactly what to fix. Students who review thoroughly improve more than students who score highest in Week 4.'}
+  },
+  { id:'wk5', num:'Week 5', title:'Attack your weakest section', dates:'31 Jul – 6 Aug', color:'#f87171', colorBg:'rgba(248,113,113,0.1)',
+    days:[
+      {date:'Thu 31 Jul', tag:'vr', label:'Double session', task:'Double session on your weakest section from Mock 1. Two full timed sections back to back — push through mental fatigue deliberately.'},
+      {date:'Fri 1 Aug', tag:'dm', label:'DM', task:'All 6 DM question types practised separately: syllogisms, Venn diagrams, probability, seating arrangements, assumptions, interpreting info.'},
+      {date:'Sat 2 Aug', tag:'mock', label:'Mini mock', task:'DM and SJT back to back timed. Score and review immediately after. Note which specific question types still losing marks.'},
+      {date:'Sun 3 Aug', tag:'rest', label:'Light day', task:'30 minutes SJT only — keep it gentle. Gym or martial arts session. Rest the brain from heavy sessions. Physical recovery matters.'},
+      {date:'Mon 4 Aug', tag:'qr', label:'QR', task:'Complex QR — compound interest, speed/distance/time, drug dosage calculations. 30 timed questions. These appear often in real test.'},
+      {date:'Tue 5 Aug', tag:'vr', label:'VR', task:'Full timed VR. Target: complete 10 passages in 21 minutes. Develop a fast-guess strategy for the final passage if running low on time.'},
+      {date:'Wed 6 Aug', tag:'rest', label:'Review', task:'Error log and score tracker update. Compare Week 5 section scores to Week 1 baseline. The improvement should be clearly visible now.'},
+    ]
+  },
+  { id:'wk6', num:'Week 6', title:'Second mock — test stamina', dates:'7–13 Aug', color:'#2dd4bf', colorBg:'rgba(45,212,191,0.1)',
+    days:[
+      {date:'Thu 7 Aug', tag:'vr', label:'VR', task:'Keyword scanning technique — practise answering True/False/Can\'t Tell in under 25 seconds each. Scan the passage, don\'t read every word.'},
+      {date:'Fri 8 Aug', tag:'dm', label:'DM', task:'Full timed DM section. Remember: no penalty for wrong answers — always answer every question, even if guessing.'},
+      {date:'Sat 9 Aug', tag:'mock', label:'MOCK 2', task:'Full mock — 2 hours, exam conditions. Record each section score separately. Compare directly to Mock 1 section by section.'},
+      {date:'Sun 10 Aug', tag:'rest', label:'Review', task:'2-hour mock review. Which sections improved vs Mock 1? Which did not? Adjust Week 7 focus to target what did not improve.'},
+      {date:'Mon 11 Aug', tag:'sjt', label:'SJT', task:'Advanced SJT — complex multi-step scenarios, ranking questions. 40 timed questions. Focus on the priority order: patient safety first.'},
+      {date:'Tue 12 Aug', tag:'qr', label:'QR', task:'Full QR section. For training: first 10 questions without the calculator. Forces mental arithmetic speed for the simplest calculations.'},
+      {date:'Wed 13 Aug', tag:'vr', label:'VR + DM', task:'Mixed VR and DM — 45 minutes. Focus on maintaining accuracy when mentally tired — this is the real test condition.'},
+    ],
+    alert:{type:'info', text:'By Week 6 aim for 1750+ consistently. If still below — try the Medify free trial for extra question variety and adaptive targeting in the second half of prep.'}
+  },
+  { id:'wk7', num:'Week 7', title:'Polish and precision', dates:'14–20 Aug', color:'#e879f9', colorBg:'rgba(232,121,249,0.1)',
+    days:[
+      {date:'Thu 14 Aug', tag:'vr', label:'VR', task:'Target 700+ per VR section. Focus entirely on Can\'t Tell questions — practise resisting the urge to use outside knowledge when answering.'},
+      {date:'Fri 15 Aug', tag:'dm', label:'DM', task:'All DM question types — speed challenge. Each question type under 60 seconds. Logical instinct should feel close to automatic by now.'},
+      {date:'Sat 16 Aug', tag:'mock', label:'Mini mock', task:'QR + VR + DM back to back (no SJT) — 1 hour 20 minutes. Focus on not losing marks in the final 10 minutes when fatigue hits.'},
+      {date:'Sun 17 Aug', tag:'sjt', label:'SJT', task:'Read one NHS patient story or news item this morning. Apply those lessons to SJT practice questions. Aim for Band 1 language consistently.'},
+      {date:'Mon 18 Aug', tag:'qr', label:'QR', task:'Multi-step QR problems — compound interest, percentage change chains, mixed unit problems. 30 timed. Check every answer before moving on.'},
+      {date:'Tue 19 Aug', tag:'vr', label:'VR', task:'Full VR timed. If still not finishing all passages — finalise a clear quick-guess strategy for the last passage to maximise marks from time saved.'},
+      {date:'Wed 20 Aug', tag:'rest', label:'Review', task:'Full error log review and score tracker update. Scores should be trending clearly upward week on week. If not — identify specifically why.'},
+    ]
+  },
+  { id:'wk8', num:'Week 8', title:'Third mock — peak pressure', dates:'21–27 Aug', color:'#38bdf8', colorBg:'rgba(56,189,248,0.1)',
+    days:[
+      {date:'Thu 21 Aug', tag:'dm', label:'DM', task:'Complex DM — multi-step logical problems. Draw diagrams on paper for every question. Aim for 80%+ accuracy before checking time.'},
+      {date:'Fri 22 Aug', tag:'vr', label:'VR', task:'Medical passage practice — read clinical trial summaries and NHS reports, then apply your VR technique to extract information under time pressure.'},
+      {date:'Sat 23 Aug', tag:'mock', label:'MOCK 3', task:'Most important mock yet. Simulate test centre conditions: timed entry, no phone at all, no notes, quiet room. This is the closest to real test day.'},
+      {date:'Sun 24 Aug', tag:'rest', label:'Review', task:'Full review and compare to Mocks 1 and 2. Clear upward trend should be visible. If SJT or VR still weak — adjust Week 9 to target those.'},
+      {date:'Mon 25 Aug', tag:'sjt', label:'SJT', task:'Full SJT section timed. Review answers against the official UCAT band descriptors. Write down which scenarios tripped you up and why.'},
+      {date:'Tue 26 Aug', tag:'qr', label:'QR', task:'QR speed challenge — 36 questions in 22 minutes (tighter than real test). Practise faster calculator key location — don\'t look at keys.'},
+      {date:'Wed 27 Aug', tag:'vr', label:'VR', task:'Full VR timed. Practise moving on from hard questions without hesitation or panic. Dwelling costs marks on all later questions.'},
+    ],
+    alert:{type:'warn', text:'By Mock 3 aim for 1850+ consistently. If SJT is below Band 2 — add an extra 30 minutes of SJT every morning in Week 9 on top of the daily plan.'}
+  },
+  { id:'wk9', num:'Week 9', title:'Consolidate and sharpen', dates:'28 Aug – 3 Sep', color:'#fb923c', colorBg:'rgba(251,146,60,0.1)',
+    days:[
+      {date:'Thu 28 Aug', tag:'mock', label:'MOCK 4', task:'Full mock using a fresh question bank if possible — the official UCAT second practice test, or start the Medify free trial for new questions.'},
+      {date:'Fri 29 Aug', tag:'rest', label:'Review', task:'Full mock review. Identify any remaining error patterns. This is the last major adjustment window before the test. Act on what you find.'},
+      {date:'Sat 30 Aug', tag:'vr', label:'VR speed drill', task:'44 VR questions in 19 minutes — tighter than real test. This builds a time buffer for test day nerves and any unexpected slow passages.'},
+      {date:'Sun 31 Aug', tag:'rest', label:'Light day', task:'30 minutes of SJT reading only — no timed pressure. Gym or martial arts session. Mental reset day, allow the brain to recover fully.'},
+      {date:'Mon 1 Sep', tag:'dm', label:'DM polish', task:'Your weakest DM question type only — 20 targeted questions with no time pressure. Focus entirely on understanding and getting it right.'},
+      {date:'Tue 2 Sep', tag:'qr', label:'QR', task:'Full QR section. Aim for 90%+ accuracy. Slow down slightly to be more precise — quality over raw speed at this stage of prep.'},
+      {date:'Wed 3 Sep', tag:'sjt', label:'SJT', task:'40 SJT questions. Before each scenario — think of a specific real ward moment. Let your actual NHS experience guide the answer.'},
+    ]
+  },
+  { id:'wk10', num:'Week 10', title:'Final mock — lock in confidence', dates:'4–10 Sep', color:'#4ade80', colorBg:'rgba(74,222,128,0.1)',
+    days:[
+      {date:'Thu 4 Sep', tag:'vr', label:'VR', task:'30 VR questions timed. No new techniques — only use what is already working automatically. This is consolidation, not discovery.'},
+      {date:'Fri 5 Sep', tag:'dm', label:'DM', task:'25 DM questions — familiar types only. The goal is confidence and reinforcement, not learning anything new at this stage.'},
+      {date:'Sat 6 Sep', tag:'mock', label:'MOCK 5 — FINAL', task:'Final full mock under the strictest exam conditions. This is the dress rehearsal. Log the score. Be proud of where you started vs today.'},
+      {date:'Sun 7 Sep', tag:'rest', label:'Light review', task:'Brief review of Mock 5 errors only. Then stop. No new material at all. Plan test day logistics — location, travel time, what to eat.'},
+      {date:'Mon 8 Sep', tag:'sjt', label:'SJT', task:'20 easy, familiar SJT questions only. Confidence building — not challenge. Keep the brain warm and calm, not stressed.'},
+      {date:'Tue 9 Sep', tag:'qr', label:'QR', task:'20 straightforward QR questions. Keep the brain active and engaged — but relaxed. No pressure. Enjoy the familiarity of the question types.'},
+      {date:'Wed 10 Sep', tag:'rest', label:'Full REST', task:'No UCAT prep at all today. Gym, martial arts, Lego, gaming, family time. The brain needs full recovery before test week.'},
+    ],
+    alert:{type:'danger', text:'No new techniques, no panic studying, no new resources in this week at all. What Aman has built over 10 weeks is what wins. Trust it completely.'}
+  },
+  { id:'wk11', num:'Week 11', title:'Test week — execute the plan', dates:'11–16 Sep', color:'#f87171', colorBg:'rgba(248,113,113,0.1)',
+    days:[
+      {date:'Thu 11 Sep', tag:'vr', label:'VR light', task:'30 minutes of light VR questions only. Calm and familiar. Confirm test centre exact location. Check photo ID is ready and valid.'},
+      {date:'Fri 12 Sep', tag:'sjt', label:'SJT light', task:'20 minutes of SJT only. Read one reflection from your ward volunteering log. Eat a proper meal. In bed before 10pm tonight.'},
+      {date:'Sat 13 Sep', tag:'rest', label:'Full REST', task:'Complete rest day. Gym or martial arts session. No UCAT at all. Watch something you enjoy. Good dinner. No screens after 9pm.'},
+      {date:'Sun 14 Sep', tag:'rest', label:'Full REST', task:'Complete rest. Family time. No screens after 9pm. In bed by 10pm. Alarm set twice for tomorrow morning. Everything is ready.'},
+      {date:'Mon/Tue 15–16 Sep', tag:'mock', label:'TEST DAY', task:'Proper breakfast. Leave 45 minutes early. Arrive calm and confident. Score appears on screen immediately after finishing. Use the score to finalise your university shortlist before the UCAS October deadline.'},
+    ],
+    alert:{type:'success', text:'1700+ opens Keele A104. 1900+ opens many more doors. 2000+ and Aman is competitive across the board. Whatever the score — apply strategically. The ward volunteering, DofE Gold, and strong A-levels make this a compelling application regardless.'}
+  },
+];
+
+// ─── RENDER WEEKS ────────────────────────────────────────────────────────────
+function tagClass(t) {
+  const m = {vr:'tag-vr',dm:'tag-dm',qr:'tag-qr',sjt:'tag-sjt',mock:'tag-mock',rest:'tag-rest',setup:'tag-setup'};
+  return m[t] || 'tag-rest';
+}
+function renderWeeks() {
+  const container = document.getElementById('week-grid');
+  const saved = JSON.parse(localStorage.getItem('ucat_checks') || '{}');
+  const today = new Date();
+
+  WEEKS.forEach((wk, wi) => {
+    const card = document.createElement('div');
+    card.className = 'week-card';
+    card.id = wk.id;
+
+    // Calculate completion
+    const totalDays = wk.days.length;
+    const doneDays = wk.days.filter((_,di) => saved[`${wk.id}_${di}`]).length;
+    const pct = Math.round((doneDays/totalDays)*100);
+
+    let alertHtml = '';
+    if (wk.alert) {
+      alertHtml = `<div class="week-alert alert-${wk.alert.type}">${wk.alert.text}</div>`;
+    }
+
+    let daysHtml = wk.days.map((d,di) => {
+      const key = `${wk.id}_${di}`;
+      const checked = saved[key];
+      return `<div class="day-row${checked?' done':''}" id="row_${key}">
+        <div class="day-date">${d.date}</div>
+        <div class="day-tag ${tagClass(d.tag)}">${d.label}</div>
+        <div class="day-task">${d.task}</div>
+        <div class="day-check${checked?' checked':''}" onclick="toggleCheck('${key}')" title="Mark as done"></div>
+      </div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="week-header" onclick="toggleWeek('${wk.id}')">
+        <div class="week-num" style="background:${wk.colorBg};color:${wk.color}">${wk.num}</div>
+        <div class="week-info">
+          <div class="week-title">${wk.title}</div>
+          <div class="week-dates">${wk.dates}</div>
+        </div>
+        <div class="week-meta">
+          <div class="week-progress">${doneDays}/${totalDays} done</div>
+          <div class="week-chevron" id="chev_${wk.id}">▼</div>
+        </div>
+      </div>
+      <div class="week-body" id="body_${wk.id}">
+        <div class="day-list">${daysHtml}</div>
+        ${alertHtml}
+      </div>`;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function toggleWeek(id) {
+  const body = document.getElementById('body_' + id);
+  const chev = document.getElementById('chev_' + id);
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  chev.textContent = open ? '▼' : '▲';
+}
+
+function toggleCheck(key) {
+  const saved = JSON.parse(localStorage.getItem('ucat_checks') || '{}');
+  saved[key] = !saved[key];
+  localStorage.setItem('ucat_checks', JSON.stringify(saved));
+  const el = document.querySelector(`[onclick="toggleCheck('${key}')"]`);
+  const row = document.getElementById('row_' + key);
+  if (saved[key]) { el.classList.add('checked'); row.classList.add('done'); }
+  else { el.classList.remove('checked'); row.classList.remove('done'); }
+  updateWeekCount(key.split('_')[0]+'_'+key.split('_')[1].split('_')[0]);
+  updateProgress();
+}
+
+function updateWeekCount(wkId) {
+  const saved = JSON.parse(localStorage.getItem('ucat_checks') || '{}');
+  WEEKS.forEach(wk => {
+    const total = wk.days.length;
+    const done = wk.days.filter((_,di) => saved[`${wk.id}_${di}`]).length;
+    const meta = document.querySelector(`#${wk.id} .week-progress`);
+    if (meta) meta.textContent = `${done}/${total} done`;
+  });
+}
+
+function updateProgress() {
+  const saved = JSON.parse(localStorage.getItem('ucat_checks') || '{}');
+  const total = WEEKS.reduce((a,wk) => a + wk.days.length, 0);
+  const done = Object.values(saved).filter(Boolean).length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-label').textContent = `${done} of ${total} tasks complete`;
+}
+
+// ─── COUNTDOWN ───────────────────────────────────────────────────────────────
+function updateCountdown() {
+  const target = new Date('2026-09-16T15:00:00+01:00');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { document.getElementById('countdown-bar').innerHTML = '<strong style="color:var(--green)">Test window has closed. Good luck with applications!</strong>'; return; }
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+}
+
+// ─── SCORE TRACKER ───────────────────────────────────────────────────────────
+function saveScore(idx, val) {
+  const scores = JSON.parse(localStorage.getItem('ucat_scores') || '{}');
+  scores[idx] = val ? parseInt(val) : null;
+  localStorage.setItem('ucat_scores', JSON.stringify(scores));
+  drawChart();
+}
+function loadScores() {
+  const scores = JSON.parse(localStorage.getItem('ucat_scores') || '{}');
+  Object.entries(scores).forEach(([i,v]) => {
+    const el = document.getElementById('score-' + i);
+    if (el && v) el.value = v;
+  });
+  drawChart();
+}
+function drawChart() {
+  const canvas = document.getElementById('score-chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const scores = JSON.parse(localStorage.getItem('ucat_scores') || '{}');
+  const labels = ['Baseline','Mock 1\n(Wk 4)','Mock 2\n(Wk 6)','Mock 3\n(Wk 8)','Mock 4\n(Wk 9)','Mock 5\n(Wk 10)'];
+  const data = [0,1,2,3,4,5].map(i => scores[i] || null);
+  const w = canvas.offsetWidth * (window.devicePixelRatio||1);
+  const h = canvas.height * (window.devicePixelRatio||1);
+  canvas.width = w; canvas.height = h;
+  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+  const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+  const pad = {t:20,r:20,b:40,l:50};
+  const pw = cw - pad.l - pad.r, ph = ch - pad.t - pad.b;
+  ctx.clearRect(0,0,cw,ch);
+  // grid
+  const yMin=800, yMax=2700;
+  [900,1200,1500,1700,1900,2100,2400,2700].forEach(y => {
+    const fy = pad.t + ph - (y-yMin)/(yMax-yMin)*ph;
+    ctx.beginPath(); ctx.strokeStyle = y===1700 ? 'rgba(34,197,94,0.3)' : y===1900 ? 'rgba(245,158,11,0.3)' : 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = y===1700||y===1900 ? 1.5 : 0.5;
+    ctx.setLineDash(y===1700||y===1900 ? [4,4] : []);
+    ctx.moveTo(pad.l, fy); ctx.lineTo(pad.l+pw, fy); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '10px monospace'; ctx.textAlign='right';
+    ctx.fillText(y, pad.l-6, fy+3);
+  });
+  // labels
+  labels.forEach((lbl,i) => {
+    const x = pad.l + (i/(labels.length-1))*pw;
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '10px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(lbl.split('\n')[0], x, ch-24);
+    if(lbl.includes('\n')) ctx.fillText(lbl.split('\n')[1], x, ch-12);
+  });
+  // target labels
+  ctx.fillStyle='rgba(34,197,94,0.7)'; ctx.font='9px sans-serif'; ctx.textAlign='left';
+  ctx.fillText('Target min 1700', pad.l+4, pad.t + ph - (1700-yMin)/(yMax-yMin)*ph - 4);
+  ctx.fillStyle='rgba(245,158,11,0.7)';
+  ctx.fillText('Goal 1900', pad.l+4, pad.t + ph - (1900-yMin)/(yMax-yMin)*ph - 4);
+  // line
+  const pts = data.map((v,i) => v ? {x: pad.l+(i/(labels.length-1))*pw, y: pad.t+ph-(v-yMin)/(yMax-yMin)*ph} : null).filter(Boolean);
+  if (pts.length > 1) {
+    ctx.beginPath(); ctx.strokeStyle='#4f7cff'; ctx.lineWidth=2; ctx.lineJoin='round';
+    pts.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke();
+  }
+  pts.forEach(p => {
+    ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2); ctx.fillStyle='#4f7cff'; ctx.fill();
+    ctx.beginPath(); ctx.arc(p.x,p.y,3,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+  });
+}
+
+// ─── PANELS ──────────────────────────────────────────────────────────────────
+function showPanel(name, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name==='tracker') { setTimeout(drawChart,50); }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderWeeks();
+loadScores();
+updateCountdown();
+setInterval(updateCountdown, 30000);
+window.addEventListener('resize', () => { if(document.getElementById('panel-tracker').classList.contains('active')) drawChart(); });
+</script>
+</body>
+</html>
